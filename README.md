@@ -1,6 +1,6 @@
 # Code for RV mechanics in early-stage PAH: Right ventricular mechanics in early-stage pulmonary arterial hypertension: a computational study
 
-This repository contains supporting code for th 
+This repository contains supporting code for the paper: "Right ventricular mechanics in early-stage pulmonary arterial hypertension: a computational study".
 
 In this code we try in estimate passive and active properties for the RV assuming known passive and active properties for the LV.
 
@@ -51,7 +51,7 @@ https://github.com/oscarodeigah/rv_pah_project/assets/2010323/5aabc606-f6af-4d3d
 We have also collected all the results in the paper in the folder called ["postprocessed_results"](postprocessed_results). To recreate the figures, you first need to install some dependencies
 
 ```
-python3 -m pip install matplotlib numpy PyYAM
+python3 -m pip install matplotlib numpy PyYAML
 ```
 and then you can run 
 ```
