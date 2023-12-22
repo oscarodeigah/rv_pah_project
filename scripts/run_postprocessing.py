@@ -1,5 +1,6 @@
 import pulse
 import yaml
+from pathlib import Path
 import json
 
 from rv_pah_project.postprocess_model import (
@@ -9,10 +10,12 @@ from rv_pah_project.postprocess_model import (
 
 
 def main():
-    animal = "CNT"
-    meshfile = "CNT.h5"
-    pv_datafile = "CNT.yml"
-    lv_active_datafile = "LV_active_data.json"
+    data_folder = Path(__file__).resolve().parents[1] / "data" / "sample_datafiles"
+
+    meshfile = data_folder / "CNT.h5"
+    pv_datafile = data_folder / "CNT.yml"
+    lv_active_datafile = data_folder / "LV_active_data.json"
+
     lv_matparam_a = 1.42
     result_file = "results_CNT.json"
 
@@ -36,7 +39,7 @@ def main():
         "simulated_volume",
     ]
 
-    matparam_dict = {animal: [lv_matparam_a, RV_results["passive_parameter"]]}
+    matparam_dict = {"CNT": [lv_matparam_a, RV_results["passive_parameter"]]}
 
     # Load the mesh geometry (unloaded reference geometry)
     unloaded_geo = pulse.Geometry.from_file(h5name=meshfile, h5group="-1/unloaded")
@@ -54,7 +57,7 @@ def main():
 
     # Postprocess the model optimization results
     postprocess_simulation(
-        animal,
+        "CNT",
         unloaded_geo,
         features,
         matparam_dict,
