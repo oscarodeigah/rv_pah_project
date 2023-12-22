@@ -3,7 +3,7 @@ import yaml
 import json
 from pathlib import Path
 import numpy as np
-from model_optimization import passive_optimization, active_optimization
+from rv_pah_project import passive_optimization, active_optimization
 
 
 def main():
