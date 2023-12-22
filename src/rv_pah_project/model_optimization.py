@@ -134,15 +134,9 @@ def passive_optimization(
         logger.info(f"\nCurrent x: {x}")
 
     x0 = np.array([initial_rv_matparam_a])
-<<<<<<< HEAD:src/rv_pah_project/model_optimization.py
-    bnds = [(0.05, 10)]
-
-    logger.info("\nStarting passive optimization")
-=======
     bnds = [(0.07, 10)]
     
     logger.info(f"\nStarting passive optimization")
->>>>>>> origin/main:scripts/model_optimization.py
     start = datetime.now()
     res = minimize(
         objective, x0=x0, bounds=bnds, options={"disp": 5}, callback=print_control
