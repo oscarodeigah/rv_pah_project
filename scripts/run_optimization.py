@@ -1,15 +1,17 @@
 import pulse
 import yaml
 import json
+from pathlib import Path
 import numpy as np
-from model_optimization import passive_optimization, active_optimization
+from rv_pah_project import passive_optimization, active_optimization
 
 
 def main():
+    data_folder = Path(__file__).resolve().parents[1] / "data" / "sample_datafiles"
 
-    meshfile = "../data/sample_datafiles/CNT.h5"
-    pv_datafile = "../data/sample_datafiles/CNT.yml"
-    lv_active_datafile = "../data/sample_datafiles/LV_active_data.json"
+    meshfile = data_folder / "CNT.h5"
+    pv_datafile = data_folder / "CNT.yml"
+    lv_active_datafile = data_folder / "LV_active_data.json"
     result_file = "results_CNT.json"
     lv_matparam_a = 1.42
     initial_rv_matparam_a = 0.8
@@ -18,8 +20,10 @@ def main():
     with open(pv_datafile) as f:
         pv_data = yaml.safe_load(f)
 
-    LVP_ = pv_data['LVP']; LVV_ = pv_data['LVV']
-    RVP_ = pv_data['RVP']; RVV_ = pv_data['RVV']
+    LVP_ = pv_data["LVP"]
+    LVV_ = pv_data["LVV"]
+    RVP_ = pv_data["RVP"]
+    RVV_ = pv_data["RVV"]
 
     v_data_ = []
     p_data_ = []
@@ -32,19 +36,16 @@ def main():
 
     # Load the mesh geometry (unloaded reference geometry)
     # It is also possible to ignore the "h5group" if that was not specified when creating the h5 file.
-    unloaded_geo = pulse.Geometry.from_file(
-        h5name=meshfile,
-        h5group="-1/unloaded"
-    )
+    unloaded_geo = pulse.Geometry.from_file(h5name=meshfile, h5group="-1/unloaded")
 
     ################### Passive optimization ###################
 
     opt_rv_matparam_a = passive_optimization(
-        unloaded_geo,
-        lv_matparam_a, 
-        initial_rv_matparam_a, 
-        p_data,
-        v_data
+        unloaded_geometry=unloaded_geo,
+        lv_matparam_a=lv_matparam_a,
+        initial_rv_matparam_a=initial_rv_matparam_a,
+        pressure_data=p_data,
+        volume_data=v_data,
     )
 
     ################### Active optimization ###################
@@ -61,13 +62,16 @@ def main():
         active_control,
         p_data,
         v_data,
-        LV_active_["LV_active_data"]
+        LV_active_["LV_active_data"],
     )
 
     # Save passive & active optimization results to file
-    final_results = {"passive_parameter": opt_rv_matparam_a, "active_parameter": RV_active_}
+    final_results = {
+        "passive_parameter": opt_rv_matparam_a,
+        "active_parameter": RV_active_,
+    }
 
-    with open(result_file, 'w') as f:
+    with open(result_file, "w") as f:
         json.dump(final_results, f, indent=4)
 
 

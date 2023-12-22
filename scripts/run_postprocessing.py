@@ -1,46 +1,48 @@
 import pulse
 import yaml
+from pathlib import Path
 import json
 
-from postprocess_model import postprocess_simulation, compute_time_varying_elastance
+from rv_pah_project.postprocess_model import (
+    postprocess_simulation,
+    compute_time_varying_elastance,
+)
 
 
 def main():
+    data_folder = Path(__file__).resolve().parents[1] / "data" / "sample_datafiles"
 
-    animal = "CNT"
-    meshfile = "CNT.h5"
-    pv_datafile = "CNT.yml"
-    lv_active_datafile = "LV_active_data.json"
+    meshfile = data_folder / "CNT.h5"
+    pv_datafile = data_folder / "CNT.yml"
+    lv_active_datafile = data_folder / "LV_active_data.json"
+
     lv_matparam_a = 1.42
     result_file = "results_CNT.json"
 
     # Load the results from the model optimization
-    with open(result_file, 'r') as f:
+    with open(result_file, "r") as f:
         RV_results = json.load(f)
 
     features = [
-        'cauchy_stress:fiber',
-        'cauchy_stress:circumferential',
-        'cauchy_stress:longitudinal',
-        'cauchy_stress:radial',
-        'green_strain:fiber',
-        'green_strain:circumferential',
-        'green_strain:longitudinal',
-        'green_strain:radial',
-        'gamma',
-        'material_parameter_a',
-        'measured_pressure',
-        'measured_volume',
-        'simulated_volume'
+        "cauchy_stress:fiber",
+        "cauchy_stress:circumferential",
+        "cauchy_stress:longitudinal",
+        "cauchy_stress:radial",
+        "green_strain:fiber",
+        "green_strain:circumferential",
+        "green_strain:longitudinal",
+        "green_strain:radial",
+        "gamma",
+        "material_parameter_a",
+        "measured_pressure",
+        "measured_volume",
+        "simulated_volume",
     ]
 
-    matparam_dict = {animal: [lv_matparam_a, RV_results["passive_parameter"]]}
+    matparam_dict = {"CNT": [lv_matparam_a, RV_results["passive_parameter"]]}
 
     # Load the mesh geometry (unloaded reference geometry)
-    unloaded_geo = pulse.Geometry.from_file(
-        h5name=meshfile,
-        h5group="-1/unloaded"
-    )
+    unloaded_geo = pulse.Geometry.from_file(h5name=meshfile, h5group="-1/unloaded")
 
     # Load the PV data and format it to be in the required shape
     with open(pv_datafile) as f:
@@ -55,26 +57,27 @@ def main():
 
     # Postprocess the model optimization results
     postprocess_simulation(
-        animal,
+        "CNT",
         unloaded_geo,
         features,
         matparam_dict,
         pv_data,
         LV_active_data,
-        RV_active_data
+        RV_active_data,
     )
 
     # Time-varying elastance is not computed for the unloaded (reference) geometry
-    # hence, the initial points added to LV_active_data & RV_active_data are ignored. 
+    # hence, the initial points added to LV_active_data & RV_active_data are ignored.
     compute_time_varying_elastance(
-        animal,
+        "CNT",
         unloaded_geo,
         matparam_dict,
         pv_data,
         LV_active_data[1:],
         RV_active_data[1:],
-        outdir='elastance_results'
+        outdir="elastance_results",
     )
+
 
 if __name__ == "__main__":
     main()
