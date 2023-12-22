@@ -130,7 +130,7 @@ def passive_optimization(
         logger.info(f"\nCurrent x: {x}")
     
     x0 = np.array([initial_rv_matparam_a])
-    bnds = [(0.05, 10)]
+    bnds = [(0.07, 10)]
     
     logger.info(f"\nStarting passive optimization")
     start = datetime.now()
@@ -231,7 +231,7 @@ def active_optimization(
         logger.info(f"\nRun_time: {hours} hours, {mins} minutes and {secs} seconds")
 
         RV_active_values.append(res.x[0])
-        x0 = np.array([res.x])
+        x0 = np.array([res.x[0]])
 
     logger.info(f"\nActive optimization done.")
     overall_end = datetime.now()
