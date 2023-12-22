@@ -41,6 +41,11 @@ For the sample datasets this takes about 2.5 hours on a regular laptop.
 
 Once this is done you can run the [run_postprocessing.py](scripts/run_postprocessing.py) which will extract different metrics from the simulation
 
+The movie shows the simulation using the example data
+
+https://github.com/oscarodeigah/rv_pah_project/assets/2010323/5aabc606-f6af-4d3d-b37f-cc1993289953
+
+
 ## Reproducing figures in the paper
 
 We have also collected all the results in the paper in the folder called ["postprocessed_results"](postprocessed_results). To recreate the figures, you first need to install some dependencies
