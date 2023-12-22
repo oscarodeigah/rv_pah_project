@@ -147,6 +147,17 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
+postprocessed_results/data_assimilation_results.pdf
+postprocessed_results/effect_of_geo_remodeling_new_test.pdf
+postprocessed_results/lv_active_data.pdf
+postprocessed_results/lv_pv_data.pdf
+postprocessed_results/mesh_convergence_analysis_stress_strain_results.pdf
+postprocessed_results/stress_strain_results.pdf
+requirements.in
+scripts/all_results_CNT.h5
+scripts/results_CNT.json
+scripts/spatial_plots/
+
 # Pyre type checker
 .pyre/
 
