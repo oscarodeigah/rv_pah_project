@@ -648,75 +648,78 @@ def plot_effect_of_remodeling():
     fig.savefig("effect_of_geo_remodeling_new_test.pdf", dpi=300)
 
 
-def plot_lv_pv_data(lv_pv_datafile):
-    with open(lv_pv_datafile) as f:
+def plot_lv_data(lv_pv_data, lv_active_data):
+    mpl.rcParams["lines.linewidth"] = 3
+
+    fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(14, 6))
+    rc("font", weight="bold")
+
+    with open(lv_pv_data) as f:
         pv_data = yaml.safe_load(f)
 
     LVP = pv_data["LVP"]
     LVV = pv_data["LVV"]
 
-    fig, ax = plt.subplots(figsize=(10, 8))
-    ax.plot(LVV, LVP, "ro")
-
-    ax.tick_params(axis="both", which="major", labelsize=18)
-    ax.tick_params(axis="both", which="minor", labelsize=18)
-    ax.spines["bottom"].set_linewidth(2)
-    ax.spines["top"].set_linewidth(2)
-    ax.spines["left"].set_linewidth(2)
-    ax.spines["right"].set_linewidth(2)
-    ax.set_ylim(0, 15)
-    ax.set_yticks([0, 2.5, 5, 7.5, 10, 12.5, 15])
-    ax.set_yticklabels(["0", "", "5", "", "10", "", "15"], fontweight="bold")
-    ax.set_ylabel("Pressure (kPa)", fontweight="bold", fontsize=20)
-    ax.set_xlim(60, 240)
-    ax.set_xticks([60, 90, 120, 150, 180, 210, 240])
-    ax.set_xticklabels(["60", "", "120", "", "180", "", "240"], fontweight="bold")
-    ax.set_xlabel("Volume (uL)", fontweight="bold", fontsize=20)
-
-    fig.savefig("lv_pv_data.pdf", dpi=300)
-
-
-def plot_lv_active_parameter(lv_active_paramfile):
-    with open(lv_active_paramfile) as f:
+    with open(lv_active_data) as f:
         lv_active = json.load(f)
 
-    fig, ax = plt.subplots(figsize=(11, 9))
-    ax.plot(lv_active["LV_active_data"])
+    axs[0].plot(LVV, LVP, "ro")
+
+    axs[0].tick_params(axis="both", which="major", labelsize=18)
+    axs[0].tick_params(axis="both", which="minor", labelsize=18)
+    axs[0].spines["bottom"].set_linewidth(2)
+    axs[0].spines["top"].set_linewidth(2)
+    axs[0].spines["left"].set_linewidth(2)
+    axs[0].spines["right"].set_linewidth(2)
+    axs[0].set_ylim(0, 15)
+    axs[0].set_yticks([0, 2.5, 5, 7.5, 10, 12.5, 15])
+    axs[0].set_yticklabels(["0", "", "5", "", "10", "", "15"], fontweight="bold")
+    axs[0].set_ylabel("Pressure (kPa)", fontweight="bold", fontsize=20)
+    axs[0].set_xlim(60, 240)
+    axs[0].set_xticks([60, 90, 120, 150, 180, 210, 240])
+    axs[0].set_xticklabels(["60", "", "120", "", "180", "", "240"], fontweight="bold")
+    axs[0].set_xlabel("Volume (uL)", fontweight="bold", fontsize=20)
+
+    axs[1].plot(lv_active["LV_active_data"])
 
     x_points = [3, 23]
     for p in x_points:
-        ax.axvline(p, color="black", linestyle="dotted", linewidth=2)
+        axs[1].axvline(p, color="black", linestyle="dotted", linewidth=2)
 
-    ax.set_xticks([3, 23])
-    a = ax.get_xticks().tolist()
+    axs[1].set_xticks([3, 23])
+    a = axs[1].get_xticks().tolist()
     a[0] = "ED"
     a[1] = "ES"
-    ax.set_xticklabels(a, fontweight="bold")
+    axs[1].set_xticklabels(a, fontweight="bold")
 
-    ax.set_ylim(-0.5, 110)
-    ax.set_yticks([0, 20, 40, 60, 80, 100])
-    ax.set_yticklabels(["0", "20", "40", "60", "80", "100"], fontweight="bold")
-    ax.set_ylabel(
+    axs[1].set_ylim(-0.5, 110)
+    axs[1].set_yticks([0, 20, 40, 60, 80, 100])
+    axs[1].set_yticklabels(["0", "20", "40", "60", "80", "100"], fontweight="bold")
+    axs[1].set_ylabel(
         "Active stress, $\mathbf{T_{a}}$ (kPa)", fontweight="bold", fontsize=20
     )
 
-    ax.tick_params(axis="both", which="major", labelsize=18)
-    ax.tick_params(axis="both", which="minor", labelsize=18)
-    ax.spines["bottom"].set_linewidth(2)
-    ax.spines["top"].set_linewidth(2)
-    ax.spines["left"].set_linewidth(2)
-    ax.spines["right"].set_linewidth(2)
+    axs[1].tick_params(axis="both", which="major", labelsize=18)
+    axs[1].tick_params(axis="both", which="minor", labelsize=18)
+    axs[1].spines["bottom"].set_linewidth(2)
+    axs[1].spines["top"].set_linewidth(2)
+    axs[1].spines["left"].set_linewidth(2)
+    axs[1].spines["right"].set_linewidth(2)
 
-    fig.savefig("lv_active_data.pdf", dpi=300)
+    fig.subplots_adjust(wspace=0.3)
+
+    fig.savefig("lv_data.pdf", dpi=300)
 
 
 if __name__ == "__main__":
     plot_data_assimilation_results("all_PV_results.json", "all_active_results.json")
+    plot_lv_data(
+        "../data/sample_datafiles/CNT.yml",
+        "../data/sample_datafiles/LV_active_data.json",
+    )
     plot_mesh_convergence_analysis_stress_strain_results(
         "MeshConvergenceAnalysis_all_stress_results.json",
         "MeshConvergenceAnalysis_all_strain_results.json",
     )
     plot_stress_strain_results("all_stress_results.json", "all_strain_results.json")
     plot_effect_of_remodeling()
-    plot_lv_pv_data("../data/sample_datafiles/CNT.yml")
-    plot_lv_active_parameter("../data/sample_datafiles/LV_active_data.json")

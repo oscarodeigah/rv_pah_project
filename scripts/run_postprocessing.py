@@ -69,7 +69,7 @@ def main():
     # Time-varying elastance is not computed for the unloaded (reference) geometry
     # hence, the initial points added to LV_active_data & RV_active_data are ignored.
     compute_time_varying_elastance(
-        animal,
+        "CNT",
         unloaded_geo,
         matparam_dict,
         pv_data,
