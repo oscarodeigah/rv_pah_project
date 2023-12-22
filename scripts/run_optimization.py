@@ -7,9 +7,9 @@ from model_optimization import passive_optimization, active_optimization
 
 def main():
 
-    meshfile = "CNT.h5"
-    pv_datafile = "CNT.yml"
-    lv_active_datafile = "LV_active_data.json"
+    meshfile = "../data/sample_datafiles/CNT.h5"
+    pv_datafile = "../data/sample_datafiles/CNT.yml"
+    lv_active_datafile = "../data/sample_datafiles/LV_active_data.json"
     result_file = "results_CNT.json"
     lv_matparam_a = 1.42
     initial_rv_matparam_a = 0.8
@@ -41,7 +41,8 @@ def main():
 
     opt_rv_matparam_a = passive_optimization(
         unloaded_geo,
-        [lv_matparam_a, initial_rv_matparam_a], 
+        lv_matparam_a, 
+        initial_rv_matparam_a, 
         p_data,
         v_data
     )
