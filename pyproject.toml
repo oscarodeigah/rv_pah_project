@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rv_pah_project"
-version = "0.0.1"
+version = "1.0.0"
 description = "Estimate active tension and fiber angles in cardiac microtissues"
 authors = [{name = "Oscar Ofordile Odeigah", email = "oscaro@simula.no"}]
 license = {text = "MIT"}
